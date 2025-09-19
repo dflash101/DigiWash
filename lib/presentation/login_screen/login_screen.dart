@@ -81,47 +81,51 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  Future<void> _handleLogin() async {
-    if (!_isFormValid) return;
+ Future<void> _handleLogin() async {
+  if (!_isFormValid) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+  setState(() {
+    _isLoading = true;
+  });
 
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 2));
+  // Simulate network delay
+  await Future.delayed(const Duration(seconds: 2));
 
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
 
-    // Check mock credentials
+  // Check mock credentials
   if (_mockCredentials.containsKey(email) &&
-    _mockCredentials[email] == password) {
-  HapticFeedback.lightImpact();
+      _mockCredentials[email] == password) {
+    // Success - trigger haptic feedback
+    HapticFeedback.lightImpact();
 
-  if (email.contains('customer')) {
-    _showSuccessMessage('Welcome back, Customer!');
-    if (mounted) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.customerHome, // <--- go to the new page
-        (route) => false,
-      );
+    // Navigate based on user role
+    if (email.contains('customer')) {
+      _showSuccessMessage('Welcome back, Customer!');
+
+      if (mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.customerHome, // '/customer-home' also works
+          (route) => false,       // clears back stack
+        );
+      }
+    } else if (email.contains('provider')) {
+      _showSuccessMessage('Welcome back, Service Provider!');
+      // TODO: Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.providerHome, (r) => false);
+    } else if (email.contains('admin')) {
+      _showSuccessMessage('Welcome back, Admin!');
+      // TODO: Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.adminHome, (r) => false);
     }
-  } else if (email.contains('provider')) {
-    _showSuccessMessage('Welcome back, Service Provider!');
-    // TODO: push provider home when ready
-  } else if (email.contains('admin')) {
-    _showSuccessMessage('Welcome back, Admin!');
-    // TODO: push admin home when ready
+  } else {
+    // Show error message
+    _showErrorMessage('Invalid email or password. Please try again.');
   }
-} else {
-  _showErrorMessage('Invalid email or password. Please try again.');
-}
 
-    setState(() {
-      _isLoading = false;
-    });
-  }
+  setState(() {
+    _isLoading = false;
+  });
+}
 
   void _showSuccessMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
