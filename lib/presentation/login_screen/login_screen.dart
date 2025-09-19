@@ -94,26 +94,28 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
 
     // Check mock credentials
-    if (_mockCredentials.containsKey(email) &&
-        _mockCredentials[email] == password) {
-      // Success - trigger haptic feedback
-      HapticFeedback.lightImpact();
+  if (_mockCredentials.containsKey(email) &&
+    _mockCredentials[email] == password) {
+  HapticFeedback.lightImpact();
 
-      // Navigate based on user role
-      if (email.contains('customer')) {
-        // Navigate to customer dashboard (not implemented)
-        _showSuccessMessage('Welcome back, Customer!');
-      } else if (email.contains('provider')) {
-        // Navigate to provider dashboard (not implemented)
-        _showSuccessMessage('Welcome back, Service Provider!');
-      } else if (email.contains('admin')) {
-        // Navigate to admin dashboard (not implemented)
-        _showSuccessMessage('Welcome back, Admin!');
-      }
-    } else {
-      // Show error message
-      _showErrorMessage('Invalid email or password. Please try again.');
+  if (email.contains('customer')) {
+    _showSuccessMessage('Welcome back, Customer!');
+    if (mounted) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.customerHome, // <--- go to the new page
+        (route) => false,
+      );
     }
+  } else if (email.contains('provider')) {
+    _showSuccessMessage('Welcome back, Service Provider!');
+    // TODO: push provider home when ready
+  } else if (email.contains('admin')) {
+    _showSuccessMessage('Welcome back, Admin!');
+    // TODO: push admin home when ready
+  }
+} else {
+  _showErrorMessage('Invalid email or password. Please try again.');
+}
 
     setState(() {
       _isLoading = false;
