@@ -7,6 +7,7 @@ import './widgets/loading_button.dart';
 import './widgets/login_form_field.dart';
 import './widgets/password_visibility_toggle.dart';
 import './widgets/social_login_button.dart';
+import '../../routes/app_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
