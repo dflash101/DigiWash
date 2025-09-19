@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 1.h),
 
                 Text(
-                  'Sign in to your LaundryLink account',
+                  'Sign in to your DigiWash account',
                   style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
                     color: AppTheme.lightTheme.colorScheme.onSurfaceVariant,
                   ),
